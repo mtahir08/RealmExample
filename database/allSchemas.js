@@ -96,4 +96,17 @@ export const deleteAllTodoList = todoListId =>
         reject(error);
       });
   });
+
+export const queryAllTodoList = () =>
+  new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        let allTodoLists = realm.objects(TODOLIST_SCHEMA);
+        resolve(allTodoLists);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
 export default new Realm(databaseOptions);
