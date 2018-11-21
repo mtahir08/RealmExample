@@ -115,6 +115,7 @@ class TodoListComponent extends Component {
         <HeaderComponent
           title={'Todo List'}
           hasAddButton={true}
+          hasDeleteAllButton={this.state.todoLists.length > 0}
           showAddTodoList={() =>
             this.setState({ visibleDialog: true }, () =>
               this.refs.popupDialogComponent.showDialogComponentForAdd()

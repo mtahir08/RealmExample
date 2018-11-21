@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   TouchableOpacity,
   StyleSheet,
   View,
-  Platform,
-  Image
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-  deleteTodoList,
-  queryAllTodoLists,
-  updateTodoList,
-  insertNewTodoList
-} from '../database/allSchemas';
-import realm from '../database/allSchemas';
+import { deleteAllTodoList } from '../database/allSchemas';
+
+const confirmDeleteAll = () => {
+  Alert.alert(
+    'Delete',
+    'Do you want to delete all?',
+    [
+      {
+        text: 'no',
+        onPress: () => {},
+        style: 'cancel'
+      },
+      {
+        text: 'yes',
+        onPress: () => deleteAllTodoList()
+      }
+    ],
+    { cancelable: true }
+  );
+};
 
 const HeaderComponent = props => {
   const {
@@ -29,7 +42,12 @@ const HeaderComponent = props => {
     <View style={styles.container}>
       {hasAddButton && (
         <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}>
-          <Icon name="plus" size={30} color="#fff" />
+          <Icon name="plus-circle" size={30} color="#fff" />
+        </TouchableOpacity>
+      )}
+      {hasDeleteAllButton && (
+        <TouchableOpacity style={styles.addButton} onPress={confirmDeleteAll}>
+          <Icon name="trash" size={30} color="#fff" />
         </TouchableOpacity>
       )}
     </View>
