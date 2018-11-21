@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Dialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
-import { insertNewTodoList } from '../database/allSchemas';
+import { insertNewTodoList, updateTodoList } from '../database/allSchemas';
 
 class PopupDialogComponent extends Component {
   constructor(props) {
@@ -16,10 +16,18 @@ class PopupDialogComponent extends Component {
     this.state = {
       id: 0,
       name: '',
-      idAddNew: true
+      isAddNew: true
     };
   }
 
+  showDialogComponentForUpdate = param => {
+    this.setState({
+      dialogTitle: 'Update TodoList',
+      name: param.name,
+      isAddNew: false,
+      id: param.id
+    });
+  };
   showDialogComponentForAdd = () => {
     this.setState({
       dialogTitle: 'Add New TodoList',
@@ -33,22 +41,29 @@ class PopupDialogComponent extends Component {
       alert("Please Enter todoList' name");
       return;
     }
-    this.props.toggleDialog(false);
-    if (this.state.idAddNew == true) {
+    if (this.state.isAddNew == true) {
       const NewTodoList = {
         id: Math.floor(Date.now() / 1000),
         name: this.state.name,
         creationDate: new Date()
       };
       insertNewTodoList(NewTodoList)
-        .then((data) => {
-            console.log(JSON.stringify(data));
-        })
+        .then()
         .catch(error => {
           alert(`Insert new todoList error ${error}`);
         });
     } else {
+      const obj = {
+        id: this.state.id,
+        name: this.state.name
+      };
+      updateTodoList(obj)
+        .then()
+        .catch(error => {
+          alert(`Insert new todoList error ${error}`);
+        });
     }
+    this.props.toggleDialog(false);
   };
   render() {
     const { dialogTitle } = this.state;

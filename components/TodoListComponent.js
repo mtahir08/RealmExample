@@ -9,11 +9,7 @@ import {
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 
-import {
-  deleteTodoList,
-  queryAllTodoLists,
-  updateTodoList
-} from '../database/allSchemas';
+import { deleteTodoList, queryAllTodoLists } from '../database/allSchemas';
 import realm from '../database/allSchemas';
 
 import HeaderComponent from './HeaderComponent';
@@ -25,11 +21,13 @@ const FlatListItem = props => {
     id,
     name,
     creationDate,
-    popupDialogComponent,
-    onPressItem
+    onPressItem,
+    onActionPress
   } = props;
   showModal = () => {};
-  showEditModal = () => {};
+  showEditModal = () => {
+    onActionPress(id, name);
+  };
 
   showDeleteConfirmation = () => {
     Alert.alert(
@@ -134,8 +132,14 @@ class TodoListComponent extends Component {
                 name={item.name}
                 creationDate={item.creationDate}
                 itemIndex={index}
-                popupDialogComponent={this.refs.popupDialogComponent}
                 onPressItem={() => alert('You pressed')}
+                onActionPress={(id, name) =>
+                  this.setState({ visibleDialog: true }, () =>
+                    this.refs.popupDialogComponent.showDialogComponentForUpdate(
+                      { id, name }
+                    )
+                  )
+                }
               />
             );
           }}
